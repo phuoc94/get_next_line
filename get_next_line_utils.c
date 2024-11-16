@@ -6,37 +6,40 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 14:57:52 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:43:41 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(const char *str)
+size_t	ft_strnlen_delim(const char *str, char delimiter)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] && str[i] != delimiter)
 		i++;
 	return (i);
 }
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup_delim(const char *s, char delimiter, int include_delimiter)
 {
 	char	*ptr;
-	size_t	strlen;
+	size_t	len;
 	size_t	i;
 
-	strlen = ft_strlen(s);
-	ptr = malloc((strlen + 1) * sizeof(char));
+	len = ft_strnlen_delim(s, delimiter);
+	if (include_delimiter && s[len] == delimiter)
+		len++;
+	ptr = malloc((len + 1) * sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
-	while (i <= strlen)
+	while (i < len)
 	{
 		ptr[i] = s[i];
 		i++;
 	}
+	ptr[len] = '\0';
 	return (ptr);
 }

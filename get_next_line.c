@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 15:27:38 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 18:42:12 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	create_list(t_list **line_chain, int fd)
 		}
 		buffer[sz] = '\0';
 		add_to_list(line_chain, buffer);
+		line_chain = &(*line_chain)->next;
+		free(buffer);
 	}
 }
 
@@ -58,7 +60,7 @@ void	add_to_list(t_list **line_chain, char *buffer)
 	new_node = malloc(sizeof(t_list));
 	if (!new_node)
 		return ;
-	new_node->content = ft_strdup(buffer);
+	new_node->content = ft_strdup_delim(buffer, '\n', 1);
 	new_node->next = NULL;
 	if (*line_chain == NULL)
 		*line_chain = new_node;
