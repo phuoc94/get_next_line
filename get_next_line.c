@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/17 00:00:15 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/17 00:34:30 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,25 @@ t_list	**add_to_list(t_list **list, char *buffer, int *line_len)
 	return (list);
 }
 
-void	print_line_chain(t_list *list)
+void	copy_list_to_line(t_list **list, char *line)
 {
 	t_node	*current;
+	int		i;
+	char	*content_ptr;
 
-	printf("print_line_chain - Enter\n");
-	if (!list)
-		return ;
-	current = list->head;
+	i = 0;
+	current = (*list)->head;
 	while (current)
 	{
-		printf("print_line_chain - current->content: %s", current->content);
+		content_ptr = current->content;
+		while (content_ptr[i] != '\0')
+		{
+			line[i] = content_ptr[i];
+			i++;
+		}
 		current = current->next;
 	}
+	line[i] = '\0';
 }
 
 char	*get_next_line(int fd)
@@ -110,11 +116,18 @@ char	*get_next_line(int fd)
 	int		line_len;
 
 	line_len = 0;
-	next_line = NULL;
 	list = malloc(sizeof(t_list));
 	if (!list)
 		return (NULL);
-	create_list(&list, fd, &line_len);
-	print_line_chain(list);
+	if (!create_list(&list, fd, &line_len))
+		return (NULL);
+	next_line = malloc((line_len + 1) * sizeof(*next_line));
+	if (!next_line)
+	{
+		free_list(&list);
+		return (NULL);
+	}
+	copy_list_to_line(&list, next_line);
+	free_list(&list);
 	return (next_line);
 }
