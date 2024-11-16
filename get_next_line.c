@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 23:03:14 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 23:27:12 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,39 @@ void	create_list(t_list **list, int fd, int *line_len)
 	char	*buffer;
 	int		sz;
 
-	printf("create_list - Enter\n");
 	while (!found_newline((*list)->tail))
 	{
 		buffer = malloc((BUFFER_SIZE + 1) * sizeof(*buffer));
 		if (!buffer)
 			return ;
 		sz = read(fd, buffer, BUFFER_SIZE);
-		if (!sz)
+		if (sz <= 0)
 		{
 			free(buffer);
 			return ;
 		}
 		buffer[sz] = '\0';
-		add_to_node(list, buffer, line_len);
-		printf("create_list - add_to_list\n");
+		add_to_list(list, buffer, line_len);
 		free(buffer);
 	}
 }
 
-void	add_to_node(t_list **list, char *buffer, int *line_len)
+void	add_to_list(t_list **list, char *buffer, int *line_len)
 {
 	t_node	*new_node;
+	char	*tmp;
 
-	printf("add_to_list - Enter\n");
+	tmp = ft_strdup_delim(buffer, '\n', 1, line_len);
+	if (!tmp)
+		return ;
 	new_node = malloc(sizeof(t_node));
 	if (!new_node)
+	{
+		free(tmp);
 		return ;
-	new_node->content = ft_strdup_delim(buffer, '\n', 1, line_len);
+	}
+	new_node->content = tmp;
 	new_node->next = NULL;
-	printf("add_to_list - new_node created\n");
 	if (!(*list)->head)
 	{
 		(*list)->head = new_node;
