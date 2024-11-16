@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:59:19 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 14:58:15 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:05:34 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	main(void)
 	char	*line;
 
 	fd = open("file.txt", O_RDONLY | O_CREAT);
-	if (!fd)
+	if (fd < 0)
 		return (1);
 	line = get_next_line(fd);
 	if (!line)
 		return (1);
-	printf("this is you line: %s", line);
+	printf("this is your line: %s", line);
 	return (0);
 }
