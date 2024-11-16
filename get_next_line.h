@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:47:12 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 22:03:51 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 23:01:11 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,23 @@
 # include <stdlib.h> // for malloc
 # include <unistd.h> // read
 
-typedef struct s_list
+typedef struct s_node
 {
 	char			*content;
-	int				len;
-	struct s_list	*next;
+	struct s_node	*next;
+}					t_node;
+
+typedef struct s_list
+{
+	t_node			*head;
+	t_node			*tail;
 }					t_list;
 
 char				*get_next_line(int fd);
 char				*ft_strdup_delim(const char *s, char delimiter,
 						int include_delimiter, int *line_len);
-void				add_to_list(t_list **node, char *buffer, int *line_len);
-void				create_list(t_list **line_chain, int fd, int *line_len);
-int					found_newline(t_list *node);
+void				add_to_node(t_list **list, char *buffer, int *line_len);
+void				create_list(t_list **list, int fd, int *line_len);
+int					found_newline(t_node *node);
 
 #endif
