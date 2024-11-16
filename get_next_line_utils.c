@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 18:43:41 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 22:04:50 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ size_t	ft_strnlen_delim(const char *str, char delimiter)
 	return (i);
 }
 
-char	*ft_strdup_delim(const char *s, char delimiter, int include_delimiter)
+char	*ft_strdup_delim(const char *s, char delimiter, int include_delimiter,
+		int *line_len)
 {
 	char	*ptr;
 	size_t	len;
@@ -41,5 +42,6 @@ char	*ft_strdup_delim(const char *s, char delimiter, int include_delimiter)
 		i++;
 	}
 	ptr[len] = '\0';
+	*line_len += len;
 	return (ptr);
 }

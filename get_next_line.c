@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 18:42:12 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 22:03:41 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	found_newline(t_list *node)
 	return (0);
 }
 
-void	create_list(t_list **line_chain, int fd)
+void	create_list(t_list **line_chain, int fd, int *line_len)
 {
 	char	*buffer;
 	int		sz;
@@ -46,13 +46,13 @@ void	create_list(t_list **line_chain, int fd)
 			return ;
 		}
 		buffer[sz] = '\0';
-		add_to_list(line_chain, buffer);
+		add_to_list(line_chain, buffer, line_len);
 		line_chain = &(*line_chain)->next;
 		free(buffer);
 	}
 }
 
-void	add_to_list(t_list **line_chain, char *buffer)
+void	add_to_list(t_list **line_chain, char *buffer, int *line_len)
 {
 	t_list	*new_node;
 	t_list	*temp;
@@ -60,7 +60,7 @@ void	add_to_list(t_list **line_chain, char *buffer)
 	new_node = malloc(sizeof(t_list));
 	if (!new_node)
 		return ;
-	new_node->content = ft_strdup_delim(buffer, '\n', 1);
+	new_node->content = ft_strdup_delim(buffer, '\n', 1, line_len);
 	new_node->next = NULL;
 	if (*line_chain == NULL)
 		*line_chain = new_node;
@@ -89,7 +89,9 @@ char	*get_next_line(int fd)
 {
 	t_list	*line_chain;
 	char	*next_line;
+	int		line_len;
 
+	line_len = 0;
 	next_line = NULL;
 	line_chain = malloc(sizeof(t_list));
 	if (!line_chain)
@@ -97,8 +99,8 @@ char	*get_next_line(int fd)
 	line_chain->content = NULL;
 	line_chain->next = NULL;
 	printf("Calling create_list\n");
-	create_list(&line_chain, fd);
-	printf("Printing line_chain\n");
+	create_list(&line_chain, fd, &line_len);
+	printf("Printing line_chain, len: %d\n", line_len);
 	print_line_chain(line_chain);
 	return (next_line);
 }
