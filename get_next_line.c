@@ -6,64 +6,72 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 23:27:12 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/17 00:00:15 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //printf
 
-int	found_newline(t_node *node)
+void	free_list(t_list **list)
 {
-	char	*str;
+	t_node	*current;
+	t_node	*next;
 
-	if (!node || !node->content)
-		return (0);
-	str = node->content;
-	while (*str != '\0')
+	current = (*list)->head;
+	while (current)
 	{
-		if (*str == '\n')
-			return (1);
-		str++;
+		next = current->next;
+		free(current->content);
+		free(current);
+		current = next;
 	}
-	return (0);
+	free(*list);
+	*list = NULL;
 }
 
-void	create_list(t_list **list, int fd, int *line_len)
+t_list	**create_list(t_list **list, int fd, int *line_len)
 {
 	char	*buffer;
 	int		sz;
+	t_list	**tmp;
 
 	while (!found_newline((*list)->tail))
 	{
 		buffer = malloc((BUFFER_SIZE + 1) * sizeof(*buffer));
 		if (!buffer)
-			return ;
+			return (NULL);
 		sz = read(fd, buffer, BUFFER_SIZE);
 		if (sz <= 0)
 		{
 			free(buffer);
-			return ;
+			return (NULL);
 		}
 		buffer[sz] = '\0';
-		add_to_list(list, buffer, line_len);
+		tmp = add_to_list(list, buffer, line_len);
+		if (!tmp)
+		{
+			free_list(list);
+			return (NULL);
+		}
 		free(buffer);
 	}
+	return (list);
 }
 
-void	add_to_list(t_list **list, char *buffer, int *line_len)
+t_list	**add_to_list(t_list **list, char *buffer, int *line_len)
 {
 	t_node	*new_node;
 	char	*tmp;
 
 	tmp = ft_strdup_delim(buffer, '\n', 1, line_len);
 	if (!tmp)
-		return ;
+		return (NULL);
 	new_node = malloc(sizeof(t_node));
 	if (!new_node)
 	{
 		free(tmp);
-		return ;
+		return (NULL);
 	}
 	new_node->content = tmp;
 	new_node->next = NULL;
@@ -77,6 +85,7 @@ void	add_to_list(t_list **list, char *buffer, int *line_len)
 		(*list)->tail->next = new_node;
 		(*list)->tail = new_node;
 	}
+	return (list);
 }
 
 void	print_line_chain(t_list *list)
@@ -89,7 +98,7 @@ void	print_line_chain(t_list *list)
 	current = list->head;
 	while (current)
 	{
-		printf("print_line_chain - current->content: %s\n", current->content);
+		printf("print_line_chain - current->content: %s", current->content);
 		current = current->next;
 	}
 }
