@@ -6,11 +6,27 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 22:04:50 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/16 23:57:42 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int	found_newline(t_node *node)
+{
+	char	*str;
+
+	if (!node || !node->content)
+		return (0);
+	str = node->content;
+	while (*str != '\0')
+	{
+		if (*str == '\n')
+			return (1);
+		str++;
+	}
+	return (0);
+}
 
 size_t	ft_strnlen_delim(const char *str, char delimiter)
 {
