@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/17 00:34:30 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:46:22 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,8 @@ void	copy_list_to_line(t_list **list, char *line)
 	while (current)
 	{
 		content_ptr = current->content;
-		while (content_ptr[i] != '\0')
-		{
-			line[i] = content_ptr[i];
-			i++;
-		}
+		while (*content_ptr != '\0')
+			line[i++] = *content_ptr++;
 		current = current->next;
 	}
 	line[i] = '\0';
