@@ -6,30 +6,12 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/18 19:18:32 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:10:50 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //printf
-
-void	free_list(t_list **list)
-{
-	t_node	*current;
-	t_node	*next;
-
-	current = (*list)->head;
-	while (current)
-	{
-		next = current->next;
-		free(current->content);
-		free(current);
-		current = next;
-	}
-	free(*list);
-	*list = NULL;
-}
-
 t_list	**create_list(t_list **list, int fd, int *line_len)
 {
 	char	*buffer;
@@ -64,7 +46,7 @@ t_list	**add_to_list(t_list **list, char *buffer, int *line_len)
 	t_node	*new_node;
 	char	*tmp;
 
-	tmp = ft_strdup_delim(buffer, '\n', 1, line_len);
+	tmp = ft_strdup_delim(buffer, '\n', line_len);
 	if (!tmp)
 		return (NULL);
 	new_node = malloc(sizeof(t_node));
@@ -88,47 +70,63 @@ t_list	**add_to_list(t_list **list, char *buffer, int *line_len)
 	return (list);
 }
 
-void	copy_list_to_line(t_list **list, char *line)
+void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
 {
 	t_node	*current;
 	int		i;
+	int		j;
 	char	*content_ptr;
+	int		k;
 
 	i = 0;
+	k = 0;
+
 	current = (*list)->head;
 	while (current)
 	{
 		content_ptr = current->content;
-		while (*content_ptr != '\0')
-			line[i++] = *content_ptr++;
+		j = 0;
+		while (content_ptr[j] != '\0' && content_ptr[j] != '\n')
+			line[i++] = content_ptr[j++];
+		if(content_ptr[j] == '\n')
+			line[i++] = content_ptr[j++];
+		while (content_ptr[j])
+			next_line_head[k++] = content_ptr[j++];
 		current = current->next;
 	}
+	next_line_head[k] = '\0';
 	line[i] = '\0';
 }
 
 char	*get_next_line(int fd)
 {
-	t_list	*list;
-	char	*next_line;
-	int		line_len;
+	static	t_list	*list = NULL;
+	char			*next_line;
+	int				line_len;
+	char			*next_line_head;
 
+	next_line_head = NULL;
 	if(fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0))
 		return (NULL);
 	line_len = 0;
-	list = malloc(sizeof(t_list));
-	if (!list)
-		return (NULL);
-	list->head = NULL;
-	list->tail = NULL;
+	if(list == NULL)
+	{
+		list = malloc(sizeof(t_list));
+		if (!list)
+			return (NULL);
+		list->head = NULL;
+		list->tail = NULL;
+	}
 	if (!create_list(&list, fd, &line_len))
 		return (NULL);
 	next_line = malloc((line_len + 1) * sizeof(*next_line));
-	if (!next_line)
+	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!next_line || !next_line_head)
 	{
 		free_list(&list);
 		return (NULL);
 	}
-	copy_list_to_line(&list, next_line);
-	free_list(&list);
+	copy_list_to_line(&list, next_line, next_line_head);
+	polish(&list, next_line_head);
 	return (next_line);
 }

@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/16 23:57:42 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:41:53 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,36 +28,58 @@ int	found_newline(t_node *node)
 	return (0);
 }
 
-size_t	ft_strnlen_delim(const char *str, char delimiter)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] && str[i] != delimiter)
-		i++;
-	return (i);
-}
-
-char	*ft_strdup_delim(const char *s, char delimiter, int include_delimiter,
-		int *line_len)
+char	*ft_strdup_delim(const char *s, char delimiter, int *line_len)
 {
 	char	*ptr;
 	size_t	len;
 	size_t	i;
 
-	len = ft_strnlen_delim(s, delimiter);
-	if (include_delimiter && s[len] == delimiter)
-		len++;
-	ptr = malloc((len + 1) * sizeof(char));
+	ptr = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
-	while (i < len)
+	len = 0;
+	while (s[i] != '\0')
 	{
 		ptr[i] = s[i];
+		if(s[len] != delimiter)
+			len++;
 		i++;
 	}
-	ptr[len] = '\0';
+	if(s[len] == delimiter)
+		len++;
+	ptr[i] = '\0';
 	*line_len += len;
 	return (ptr);
+}
+
+void	free_list(t_list **list)
+{
+	t_node	*current;
+	t_node	*next;
+
+	current = (*list)->head;
+	while (current)
+	{
+		next = current->next;
+		free(current->content);
+		free(current);
+		current = next;
+	}
+	free(*list);
+	*list = NULL;
+}
+
+
+void	polish(t_list **list, char *next_line_head)
+{
+	t_node	*current;
+
+	free_list(list);
+	*list = malloc(sizeof(t_list));
+	current = malloc(sizeof(t_node));
+	current->content = next_line_head;
+	current->next = NULL;
+	(*list)->head = current;
+	(*list)->tail = current;
 }
