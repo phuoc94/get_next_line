@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 15:41:53 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 19:43:40 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ char	*ft_strdup_delim(const char *s, char delimiter, int *line_len)
 	while (s[i] != '\0')
 	{
 		ptr[i] = s[i];
-		if(s[len] != delimiter)
+		if (s[len] != delimiter)
 			len++;
 		i++;
 	}
-	if(s[len] == delimiter)
+	if (s[len] == delimiter)
 		len++;
 	ptr[i] = '\0';
 	*line_len += len;
@@ -70,8 +70,7 @@ void	free_list(t_list **list)
 	*list = NULL;
 }
 
-
-void	polish(t_list **list, char *next_line_head)
+void	reinitialize_list(t_list **list, char *next_line_head)
 {
 	t_node	*current;
 

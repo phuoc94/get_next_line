@@ -6,12 +6,13 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 17:10:50 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 19:43:49 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //printf
+
 t_list	**create_list(t_list **list, int fd, int *line_len)
 {
 	char	*buffer;
@@ -80,7 +81,6 @@ void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
 
 	i = 0;
 	k = 0;
-
 	current = (*list)->head;
 	while (current)
 	{
@@ -88,7 +88,7 @@ void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
 		j = 0;
 		while (content_ptr[j] != '\0' && content_ptr[j] != '\n')
 			line[i++] = content_ptr[j++];
-		if(content_ptr[j] == '\n')
+		if (content_ptr[j] == '\n')
 			line[i++] = content_ptr[j++];
 		while (content_ptr[j])
 			next_line_head[k++] = content_ptr[j++];
@@ -100,16 +100,16 @@ void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
 
 char	*get_next_line(int fd)
 {
-	static	t_list	*list = NULL;
+	static t_list	*list = NULL;
 	char			*next_line;
 	int				line_len;
 	char			*next_line_head;
 
 	next_line_head = NULL;
-	if(fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0))
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0))
 		return (NULL);
 	line_len = 0;
-	if(list == NULL)
+	if (list == NULL)
 	{
 		list = malloc(sizeof(t_list));
 		if (!list)
@@ -127,6 +127,6 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	copy_list_to_line(&list, next_line, next_line_head);
-	polish(&list, next_line_head);
+	reinitialize_list(&list, next_line_head);
 	return (next_line);
 }
