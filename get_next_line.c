@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 19:43:49 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:15:33 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,8 @@ char	*get_next_line(int fd)
 	char			*next_line_head;
 
 	next_line_head = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0))
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0))
 		return (NULL);
-	line_len = 0;
 	if (list == NULL)
 	{
 		list = malloc(sizeof(t_list));
@@ -117,6 +116,7 @@ char	*get_next_line(int fd)
 		list->head = NULL;
 		list->tail = NULL;
 	}
+	line_len = 0;
 	if (!create_list(&list, fd, &line_len))
 		return (NULL);
 	next_line = malloc((line_len + 1) * sizeof(*next_line));
