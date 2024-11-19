@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 21:22:42 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 22:56:11 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,20 @@ char	*ft_strdup_delim(const char *s, char delimiter, int *line_len)
 	size_t	len;
 	size_t	i;
 
+	len = 0;
+	while (s[len] != '\0' && s[len] != delimiter)
+		len++;
+	if (s[len] == delimiter)
+		len++;
 	ptr = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
 	i = 0;
-	len = 0;
 	while (s[i] != '\0')
 	{
 		ptr[i] = s[i];
-		if (s[i] != delimiter)
-			len++;
 		i++;
 	}
-	if (s[len] == delimiter)
-		len++;
 	ptr[i] = '\0';
 	*line_len += len;
 	return (ptr);
