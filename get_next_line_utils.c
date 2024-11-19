@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 19:45:13 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:22:42 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ char	*ft_strdup_delim(const char *s, char delimiter, int *line_len)
 	return (ptr);
 }
 
-void	free_list(t_list **list)
+void	free_list(t_list *list)
 {
 	t_node	*current;
 	t_node	*next;
 
-	current = (*list)->head;
+	current = list->head;
 	while (current)
 	{
 		next = current->next;
@@ -66,19 +66,19 @@ void	free_list(t_list **list)
 		free(current);
 		current = next;
 	}
-	free(*list);
-	*list = NULL;
+	free(list);
+	list = NULL;
 }
 
-void	reinitialize_list(t_list **list, char *next_line_head)
+void	reinitialize_list(t_list *list, char *next_line_head)
 {
 	t_node	*current;
 
 	free_list(list);
-	*list = malloc(sizeof(t_list));
+	list = malloc(sizeof(t_list));
 	current = malloc(sizeof(t_node));
 	current->content = next_line_head;
 	current->next = NULL;
-	(*list)->head = current;
-	(*list)->tail = current;
+	list->head = current;
+	list->tail = current;
 }

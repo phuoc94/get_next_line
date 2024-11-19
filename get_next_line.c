@@ -6,20 +6,19 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 21:04:45 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:24:02 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //printf
 
-t_list	**create_list(t_list **list, int fd, int *line_len)
+t_list	*create_list(t_list *list, int fd, int *line_len)
 {
 	char	*buffer;
 	int		sz;
-	t_list	**tmp;
 
-	while (!found_newline((*list)->tail))
+	while (!found_newline(list->tail))
 	{
 		buffer = malloc((BUFFER_SIZE + 1) * sizeof(*buffer));
 		if (!buffer)
@@ -31,8 +30,7 @@ t_list	**create_list(t_list **list, int fd, int *line_len)
 			return (NULL);
 		}
 		buffer[sz] = '\0';
-		tmp = add_to_list(list, buffer, line_len);
-		if (!tmp)
+		if (!add_to_list(list, buffer, line_len))
 		{
 			free_list(list);
 			return (NULL);
@@ -42,7 +40,7 @@ t_list	**create_list(t_list **list, int fd, int *line_len)
 	return (list);
 }
 
-t_list	**add_to_list(t_list **list, char *buffer, int *line_len)
+t_list	*add_to_list(t_list *list, char *buffer, int *line_len)
 {
 	t_node	*new_node;
 	char	*tmp;
@@ -58,20 +56,20 @@ t_list	**add_to_list(t_list **list, char *buffer, int *line_len)
 	}
 	new_node->content = tmp;
 	new_node->next = NULL;
-	if (!(*list)->head)
+	if (!list->head)
 	{
-		(*list)->head = new_node;
-		(*list)->tail = new_node;
+		list->head = new_node;
+		list->tail = new_node;
 	}
 	else
 	{
-		(*list)->tail->next = new_node;
-		(*list)->tail = new_node;
+		list->tail->next = new_node;
+		list->tail = new_node;
 	}
 	return (list);
 }
 
-void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
+void	copy_list_to_line(t_list *list, char *line, char *next_line_head)
 {
 	t_node	*current;
 	int		i;
@@ -81,7 +79,7 @@ void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
 
 	i = 0;
 	k = 0;
-	current = (*list)->head;
+	current = list->head;
 	while (current)
 	{
 		content_ptr = current->content;
@@ -123,16 +121,16 @@ char	*get_next_line(int fd)
 	if (!list)
 		return (NULL);
 	line_len = 0;
-	if (!create_list(&list, fd, &line_len))
+	if (!create_list(list, fd, &line_len))
 		return (NULL);
 	next_line = malloc((line_len + 1) * sizeof(*next_line));
 	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!next_line || !next_line_head)
 	{
-		free_list(&list);
+		free_list(list);
 		return (NULL);
 	}
-	copy_list_to_line(&list, next_line, next_line_head);
-	reinitialize_list(&list, next_line_head);
+	copy_list_to_line(list, next_line, next_line_head);
+	reinitialize_list(list, next_line_head);
 	return (next_line);
 }
