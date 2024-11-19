@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 20:15:33 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:04:45 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,16 @@ void	copy_list_to_line(t_list **list, char *line, char *next_line_head)
 	line[i] = '\0';
 }
 
+t_list	*initialize_list(t_list *list)
+{
+	list = malloc(sizeof(t_list));
+	if (!list)
+		return (NULL);
+	list->head = NULL;
+	list->tail = NULL;
+	return (list);
+}
+
 char	*get_next_line(int fd)
 {
 	static t_list	*list = NULL;
@@ -108,14 +118,10 @@ char	*get_next_line(int fd)
 	next_line_head = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0))
 		return (NULL);
-	if (list == NULL)
-	{
-		list = malloc(sizeof(t_list));
-		if (!list)
-			return (NULL);
-		list->head = NULL;
-		list->tail = NULL;
-	}
+	if (!list)
+		list = initialize_list(list);
+	if (!list)
+		return (NULL);
 	line_len = 0;
 	if (!create_list(&list, fd, &line_len))
 		return (NULL);
