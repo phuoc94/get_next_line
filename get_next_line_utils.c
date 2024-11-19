@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 19:43:40 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/19 19:45:13 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_strdup_delim(const char *s, char delimiter, int *line_len)
 	while (s[i] != '\0')
 	{
 		ptr[i] = s[i];
-		if (s[len] != delimiter)
+		if (s[i] != delimiter)
 			len++;
 		i++;
 	}
