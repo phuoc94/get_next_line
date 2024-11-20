@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:47:12 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 18:46:35 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 19:24:13 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ int					found_newline(t_node *node);
 void				free_list(t_list *list);
 size_t				count_line_len(t_list *list);
 t_list				*reinitialize_list(t_list *list, char *next_line_head);
+char 				*copy_list_to_line(t_list *list, char *next_line_head, int line_len);
 
 #endif

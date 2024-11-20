@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 18:53:12 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 19:36:17 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,24 @@ t_list	*add_to_list(t_list *list, char *buffer)
 	return (list);
 }
 
-void	copy_list_to_line(t_list *list, char *line, char *next_line_head)
+char 	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 {
 	t_node	*current;
 	int		i;
 	int		j;
 	char	*content_ptr;
 	int		k;
+	char	*line;
 
 	i = 0;
 	k = 0;
 	current = list->head;
+	line = malloc((line_len + 1) * sizeof(*line));
+	if (!line)
+	{
+		free_list(list);
+		return (NULL);
+	}
 	while (current)
 	{
 		content_ptr = current->content;
@@ -94,6 +101,7 @@ void	copy_list_to_line(t_list *list, char *line, char *next_line_head)
 	}
 	next_line_head[k] = '\0';
 	line[i] = '\0';
+	return line;
 }
 
 t_list	*initialize_list(t_list *list)
@@ -122,20 +130,14 @@ char	*get_next_line(int fd)
 	if (!create_list(list, fd))
 		return (NULL);
 	line_len = count_line_len(list);
-	next_line = malloc((line_len + 1) * sizeof(*next_line));
-	if (!next_line)
-	{
-		free_list(list);
-		return (NULL);
-	}
+
 	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!next_line_head)
 	{
-		free(next_line);
 		free_list(list);
 		return (NULL);
 	}
-	copy_list_to_line(list, next_line, next_line_head);
+	next_line = copy_list_to_line(list, next_line_head, line_len);
 	list = reinitialize_list(list, next_line_head);
 	if (!list || !*next_line)
 	{
