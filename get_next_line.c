@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 19:53:48 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:39:43 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ char	*get_next_line(int fd)
 	list = reinitialize_list(list, next_line_head);
 	if (!list || !*next_line)
 	{
+		free_list(list);
 		free(next_line);
 		return (NULL);
 	}
