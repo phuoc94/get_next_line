@@ -6,13 +6,13 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 18:44:57 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:49:24 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	found_newline(t_node *node)
+int	found_newline(t_mynode *node)
 {
 	char	*str;
 
@@ -50,8 +50,8 @@ char	*ft_strdup_buffer(const char *s)
 
 void	free_list(t_list *list)
 {
-	t_node	*current;
-	t_node	*next;
+	t_mynode	*current;
+	t_mynode	*next;
 
 	current = list->head;
 	while (current)
@@ -68,7 +68,7 @@ void	free_list(t_list *list)
 size_t	count_line_len(t_list *list)
 {
 	size_t	len;
-	t_node	*current;
+	t_mynode	*current;
 	int		i;
 
 	len = 0;
@@ -90,11 +90,11 @@ size_t	count_line_len(t_list *list)
 
 t_list	*reinitialize_list(t_list *list, char *next_line_head)
 {
-	t_node	*current;
+	t_mynode	*current;
 
 	free_list(list);
 	list = NULL;
-	current = malloc(sizeof(t_node));
+	current = malloc(sizeof(t_mynode));
 	if (!current)
 	{
 		free(next_line_head);

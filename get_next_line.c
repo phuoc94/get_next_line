@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 21:39:43 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:49:24 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ t_list	*create_list(t_list *list, int fd)
 
 t_list	*add_to_list(t_list *list, char *buffer)
 {
-	t_node	*new_node;
+	t_mynode	*new_node;
 	char	*tmp;
 
 	tmp = ft_strdup_buffer(buffer);
 	if (!tmp)
 		return (NULL);
-	new_node = malloc(sizeof(t_node));
+	new_node = malloc(sizeof(t_mynode));
 	if (!new_node)
 	{
 		free(tmp);
@@ -71,7 +71,7 @@ t_list	*add_to_list(t_list *list, char *buffer)
 
 char 	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 {
-	t_node	*current;
+	t_mynode	*current;
 	int		i;
 	char	*content_ptr;
 	int		k;
