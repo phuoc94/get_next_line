@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:47:12 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 14:09:30 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:46:35 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 12
+#  define BUFFER_SIZE 2
 # endif
 
 # include <fcntl.h>  //for open file
@@ -40,6 +40,7 @@ t_list				*add_to_list(t_list *list, char *buffer);
 t_list				*create_list(t_list *list, int fd);
 int					found_newline(t_node *node);
 void				free_list(t_list *list);
-void				reinitialize_list(t_list *list, char *next_line_head);
+size_t				count_line_len(t_list *list);
+t_list				*reinitialize_list(t_list *list, char *next_line_head);
 
 #endif
