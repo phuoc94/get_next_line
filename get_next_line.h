@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:47:12 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 21:49:32 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 22:10:37 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct s_mynode
 
 typedef struct s_list
 {
-	t_mynode			*head;
-	t_mynode			*tail;
+	t_mynode		*head;
+	t_mynode		*tail;
 }					t_list;
 
 char				*get_next_line(int fd);
@@ -42,6 +42,7 @@ int					found_newline(t_mynode *node);
 void				free_list(t_list *list);
 size_t				count_line_len(t_list *list);
 t_list				*reinitialize_list(t_list *list, char *next_line_head);
-char 				*copy_list_to_line(t_list *list, char *next_line_head, int line_len);
+char				*copy_list_to_line(t_list *list, char *next_line_head,
+						int line_len);
 
 #endif

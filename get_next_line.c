@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 21:49:24 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 22:08:49 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_list	*create_list(t_list *list, int fd)
 t_list	*add_to_list(t_list *list, char *buffer)
 {
 	t_mynode	*new_node;
-	char	*tmp;
+	char		*tmp;
 
 	tmp = ft_strdup_buffer(buffer);
 	if (!tmp)
@@ -69,13 +69,13 @@ t_list	*add_to_list(t_list *list, char *buffer)
 	return (list);
 }
 
-char 	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
+char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 {
 	t_mynode	*current;
-	int		i;
-	char	*content_ptr;
-	int		k;
-	char	*line;
+	int			i;
+	char		*content_ptr;
+	int			k;
+	char		*line;
 
 	i = 0;
 	k = 0;
@@ -99,7 +99,7 @@ char 	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 	}
 	next_line_head[k] = '\0';
 	line[i] = '\0';
-	return line;
+	return (line);
 }
 
 t_list	*initialize_list(t_list *list)
