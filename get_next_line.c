@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 19:36:17 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 19:53:48 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,30 +73,28 @@ char 	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 {
 	t_node	*current;
 	int		i;
-	int		j;
 	char	*content_ptr;
 	int		k;
 	char	*line;
 
 	i = 0;
 	k = 0;
-	current = list->head;
 	line = malloc((line_len + 1) * sizeof(*line));
 	if (!line)
 	{
 		free_list(list);
 		return (NULL);
 	}
+	current = list->head;
 	while (current)
 	{
 		content_ptr = current->content;
-		j = 0;
-		while (content_ptr[j] != '\0' && content_ptr[j] != '\n')
-			line[i++] = content_ptr[j++];
-		if (content_ptr[j] == '\n')
-			line[i++] = content_ptr[j++];
-		while (content_ptr[j])
-			next_line_head[k++] = content_ptr[j++];
+		while (*content_ptr != '\0' && *content_ptr != '\n')
+			line[i++] = *content_ptr++;
+		if (*content_ptr == '\n')
+			line[i++] = *content_ptr++;
+		while (*content_ptr)
+			next_line_head[k++] = *content_ptr++;
 		current = current->next;
 	}
 	next_line_head[k] = '\0';
@@ -130,7 +128,6 @@ char	*get_next_line(int fd)
 	if (!create_list(list, fd))
 		return (NULL);
 	line_len = count_line_len(list);
-
 	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!next_line_head)
 	{
