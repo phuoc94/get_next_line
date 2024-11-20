@@ -6,14 +6,14 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/19 22:57:14 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:09:13 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //printf
 
-t_list	*create_list(t_list *list, int fd, int *line_len)
+t_list	*create_list(t_list *list, int fd)
 {
 	char	*buffer;
 	int		sz;
@@ -30,7 +30,7 @@ t_list	*create_list(t_list *list, int fd, int *line_len)
 			return (list);
 		}
 		buffer[sz] = '\0';
-		if (!add_to_list(list, buffer, line_len))
+		if (!add_to_list(list, buffer))
 		{
 			free_list(list);
 			return (NULL);
@@ -40,12 +40,12 @@ t_list	*create_list(t_list *list, int fd, int *line_len)
 	return (list);
 }
 
-t_list	*add_to_list(t_list *list, char *buffer, int *line_len)
+t_list	*add_to_list(t_list *list, char *buffer)
 {
 	t_node	*new_node;
 	char	*tmp;
 
-	tmp = ft_strdup_delim(buffer, '\n', line_len);
+	tmp = ft_strdup_buffer(buffer);
 	if (!tmp)
 		return (NULL);
 	new_node = malloc(sizeof(t_node));
@@ -106,6 +106,30 @@ t_list	*initialize_list(t_list *list)
 	return (list);
 }
 
+size_t count_line_len(t_list *list)
+{
+	size_t len;
+	t_node *current;
+	int i;
+
+	len = 0;
+
+	current = list->head;
+	while (current)
+	{
+		i=0;
+		while (current->content[i] != '\0' && current->content[i] != '\n')
+		{
+			len++;
+			i++;
+		}
+		if(current->content[i] == '\n')
+			len++;
+		current = current->next;
+	}
+	return len;
+}
+
 char	*get_next_line(int fd)
 {
 	static t_list	*list = NULL;
@@ -120,9 +144,9 @@ char	*get_next_line(int fd)
 		list = initialize_list(list);
 	if (!list)
 		return (NULL);
-	line_len = 0;
-	if (!create_list(list, fd, &line_len))
+	if (!create_list(list, fd))
 		return (NULL);
+	line_len = count_line_len(list);
 	next_line = malloc((line_len + 1) * sizeof(*next_line));
 	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!next_line || !next_line_head)
