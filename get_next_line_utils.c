@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:41 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 21:49:24 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:59:08 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,6 @@ int	found_newline(t_mynode *node)
 	return (0);
 }
 
-char	*ft_strdup_buffer(const char *s)
-{
-	char	*ptr;
-	size_t	i;
-
-	if (s == NULL)
-		return (NULL);
-	ptr = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (ptr == NULL)
-		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
-	{
-		ptr[i] = s[i];
-		i++;
-	}
-	ptr[i] = '\0';
-	return (ptr);
-}
-
 void	free_list(t_list *list)
 {
 	t_mynode	*current;
@@ -67,9 +47,9 @@ void	free_list(t_list *list)
 
 size_t	count_line_len(t_list *list)
 {
-	size_t	len;
+	size_t		len;
 	t_mynode	*current;
-	int		i;
+	int			i;
 
 	len = 0;
 	current = list->head;

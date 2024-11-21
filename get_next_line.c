@@ -6,57 +6,50 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/20 22:08:49 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:58:58 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h> //printf
 
-t_list	*create_list(t_list *list, int fd)
+void	create_list(t_list **list, int fd)
 {
 	char	*buffer;
 	int		sz;
 
-	while (!found_newline(list->tail))
+	if (!(*list))
+	{
+		*list = malloc(sizeof(t_list));
+		if (!(*list))
+			return ;
+		(*list)->head = NULL;
+		(*list)->tail = NULL;
+	}
+	while (!found_newline((*list)->tail))
 	{
 		buffer = malloc((BUFFER_SIZE + 1) * sizeof(*buffer));
 		if (!buffer)
-			return (NULL);
+			return ;
 		sz = read(fd, buffer, BUFFER_SIZE);
-		if (sz == 0)
+		if (!sz)
 		{
 			free(buffer);
-			return (list);
+			return ;
 		}
 		buffer[sz] = '\0';
-		if (!add_to_list(list, buffer))
-		{
-			free_list(list);
-			return (NULL);
-		}
-		free(buffer);
+		add_to_list(*list, buffer);
 	}
-	return (list);
 }
 
-t_list	*add_to_list(t_list *list, char *buffer)
+void	add_to_list(t_list *list, char *buffer)
 {
 	t_mynode	*new_node;
-	char		*tmp;
 
-	tmp = ft_strdup_buffer(buffer);
-	if (!tmp)
-		return (NULL);
 	new_node = malloc(sizeof(t_mynode));
 	if (!new_node)
-	{
-		free(tmp);
-		return (NULL);
-	}
-	new_node->content = tmp;
-	new_node->next = NULL;
-	if (!list->head)
+		return ;
+	if (!list->tail)
 	{
 		list->head = new_node;
 		list->tail = new_node;
@@ -66,7 +59,8 @@ t_list	*add_to_list(t_list *list, char *buffer)
 		list->tail->next = new_node;
 		list->tail = new_node;
 	}
-	return (list);
+	new_node->content = buffer;
+	new_node->next = NULL;
 }
 
 char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
@@ -102,30 +96,17 @@ char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 	return (line);
 }
 
-t_list	*initialize_list(t_list *list)
-{
-	list = malloc(sizeof(t_list));
-	if (!list)
-		return (NULL);
-	list->head = NULL;
-	list->tail = NULL;
-	return (list);
-}
-
 char	*get_next_line(int fd)
 {
-	static t_list	*list = NULL;
-	char			*next_line;
-	int				line_len;
-	char			*next_line_head;
+	static t_list *list = NULL;
+	char *next_line;
+	int line_len;
+	char *next_line_head;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0))
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
+	create_list(&list, fd);
 	if (!list)
-		list = initialize_list(list);
-	if (!list)
-		return (NULL);
-	if (!create_list(list, fd))
 		return (NULL);
 	line_len = count_line_len(list);
 	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
