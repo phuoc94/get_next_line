@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/21 19:58:58 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/22 09:56:34 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,32 +63,39 @@ void	add_to_list(t_list *list, char *buffer)
 	new_node->next = NULL;
 }
 
+char	*process_node(t_mynode *current, t_line_data *line_data, int *i, int *k)
+{
+	char	*content_ptr;
+
+	content_ptr = current->content;
+	while (*content_ptr != '\0' && *content_ptr != '\n')
+		line_data->current_line[(*i)++] = *content_ptr++;
+	if (*content_ptr == '\n')
+		line_data->current_line[(*i)++] = *content_ptr++;
+	while (*content_ptr)
+		line_data->next_line[(*k)++] = *content_ptr++;
+	return (line_data->current_line);
+}
+
 char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 {
 	t_mynode	*current;
 	int			i;
-	char		*content_ptr;
 	int			k;
 	char		*line;
+	t_line_data	line_data;
 
 	i = 0;
 	k = 0;
 	line = malloc((line_len + 1) * sizeof(*line));
 	if (!line)
-	{
-		free_list(list);
 		return (NULL);
-	}
 	current = list->head;
+	line_data.current_line = line;
+	line_data.next_line = next_line_head;
 	while (current)
 	{
-		content_ptr = current->content;
-		while (*content_ptr != '\0' && *content_ptr != '\n')
-			line[i++] = *content_ptr++;
-		if (*content_ptr == '\n')
-			line[i++] = *content_ptr++;
-		while (*content_ptr)
-			next_line_head[k++] = *content_ptr++;
+		process_node(current, &line_data, &i, &k);
 		current = current->next;
 	}
 	next_line_head[k] = '\0';
@@ -98,10 +105,10 @@ char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 
 char	*get_next_line(int fd)
 {
-	static t_list *list = NULL;
-	char *next_line;
-	int line_len;
-	char *next_line_head;
+	static t_list	*list = NULL;
+	char			*next_line;
+	int				line_len;
+	char			*next_line_head;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:47:12 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/21 19:57:49 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/22 09:55:01 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ typedef struct s_list
 	t_mynode		*head;
 	t_mynode		*tail;
 }					t_list;
+
+typedef struct s_line_data
+{
+	char	*current_line;
+	char	*next_line;
+}				t_line_data;
 
 char				*get_next_line(int fd);
 void				add_to_list(t_list *list, char *buffer);
