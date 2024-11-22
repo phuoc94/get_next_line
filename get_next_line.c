@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/22 09:56:34 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:55:17 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*process_node(t_mynode *current, t_line_data *line_data, int *i, int *k)
 	return (line_data->current_line);
 }
 
-char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
+char	*copy_list_to_line(t_list *list, char *next_line_head)
 {
 	t_mynode	*current;
 	int			i;
@@ -87,7 +87,8 @@ char	*copy_list_to_line(t_list *list, char *next_line_head, int line_len)
 
 	i = 0;
 	k = 0;
-	line = malloc((line_len + 1) * sizeof(*line));
+	line_data.current_line_len = count_line_len(list);
+	line = malloc((line_data.current_line_len + 1) * sizeof(*line));
 	if (!line)
 		return (NULL);
 	current = list->head;
@@ -107,7 +108,6 @@ char	*get_next_line(int fd)
 {
 	static t_list	*list = NULL;
 	char			*next_line;
-	int				line_len;
 	char			*next_line_head;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
@@ -115,14 +115,13 @@ char	*get_next_line(int fd)
 	create_list(&list, fd);
 	if (!list)
 		return (NULL);
-	line_len = count_line_len(list);
 	next_line_head = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!next_line_head)
 	{
 		free_list(list);
 		return (NULL);
 	}
-	next_line = copy_list_to_line(list, next_line_head, line_len);
+	next_line = copy_list_to_line(list, next_line_head);
 	list = reinitialize_list(list, next_line_head);
 	if (!list || !*next_line)
 	{
