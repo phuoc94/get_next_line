@@ -6,7 +6,7 @@
 /*   By: phuocngu <phuocngu@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 16:46:51 by phuocngu          #+#    #+#             */
-/*   Updated: 2024/11/22 11:55:17 by phuocngu         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:46:47 by phuocngu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	create_list(t_list **list, int fd)
 		if (!buffer)
 			return ;
 		sz = read(fd, buffer, BUFFER_SIZE);
-		if (!sz)
+		if (sz <= 0)
 		{
 			free(buffer);
 			return ;
@@ -110,7 +110,7 @@ char	*get_next_line(int fd)
 	char			*next_line;
 	char			*next_line_head;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	create_list(&list, fd);
 	if (!list)
